@@ -1,0 +1,136 @@
+import { useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useWishes } from "../../wish/hooks/useWishes.ts";
+import { AuctionList, AuctionModal, AuctionSearch } from "../components";
+import { categories, sortOptions } from "../components/mockData";
+import { useAuctionEventCards } from "../hooks/useAuctionEventCards.ts";
+import type { AuctionItem } from "../types/AuctionItem";
+import { useAuth } from "../../user/hooks/useAuth";
+
+const AuctionPage = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { data: cards, isLoading, isError, error } = useAuctionEventCards();
+    const { wishes, addWish, removeWish, pendingAddId, pendingRemoveId } = useWishes();
+    const { isAuthenticated } = useAuth();
+
+    const products = useMemo<AuctionItem[]>(() => (
+        cards ?? []
+    ).map((card) => ({
+        id: card.auctionEventId,
+        productId: card.productId,
+        brand: card.brand,
+        name: card.name,
+        image: null,
+        imageUrl: card.imageUrl ?? undefined,
+        currentBid: card.currentBid,
+        timeLeft: card.endAt,
+        bidders: card.bidders,
+        category: card.category,
+    })), [cards]);
+
+    const wishedIds = useMemo(() => new Set(wishes.map((wish) => wish.id)), [wishes]);
+
+    const [selectedCategory, setSelectedCategory] = useState('전체');
+    const [priceRange, setPriceRange] = useState([0, 1000000]);
+    const [sortOption, setSortOption] = useState('남은 시간순');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<AuctionItem | null>(null);
+
+    const processedItems = useMemo(() => {
+        return (products ?? []).map(item => ({
+            ...item,
+            isWished: wishedIds.has(item.id),
+        }));
+    }, [products, wishedIds]);
+
+    const handleAddWish = addWish;
+    const handleRemoveWish = removeWish;
+
+    const filteredItems = useMemo(() => {
+        return processedItems.filter(item => {
+            const categoryMatch = selectedCategory === '전체' || item.category === selectedCategory;
+            const price = item.currentBid || 0;
+            const priceMatch = price >= priceRange[0] && price <= priceRange[1];
+            return categoryMatch && priceMatch;
+        })
+            .sort((a, b) => {
+                // 정렬 로직 (필요에 따라 추가)
+                if (sortOption === '인기순') {
+                    return b.bidders - a.bidders;
+                }
+                // 기본은 '남은 시간순' 또는 다른 옵션
+                return (a.timeLeft || '').localeCompare(b.timeLeft || '');
+            });
+    }, [processedItems, selectedCategory, priceRange, sortOption]);
+
+    const handleBidClick = (item: AuctionItem) => {
+        if (!isAuthenticated) {
+            const redirect = `/auction/${item.id}`;
+            navigate('/login', {
+                state: { from: redirect, fallback: location.pathname },
+            });
+            return;
+        }
+
+        setSelectedItem(item);
+        setIsModalOpen(true);
+    };
+
+    if (isLoading) {
+        return (
+            <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
+                <i className="fas fa-spinner fa-spin fa-3x"></i>
+            </div>
+        );
+    }
+
+    if (isError) {
+        return (
+            <div>Error: {error?.message ?? 'An unknown error occurred'}</div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-gray-50">
+            <main className="max-w-[1440px] mx-auto px-6 pt-6 pb-12">
+                <AuctionSearch
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    onCategoryChange={setSelectedCategory}
+                    sortOptions={sortOptions}
+                    sortOption={sortOption}
+                    onSortChange={setSortOption}
+                    priceRange={priceRange}
+                    onPriceChange={setPriceRange}
+                />
+                <AuctionList
+                    items={filteredItems}
+                    addWish={handleAddWish}
+                    removeWish={handleRemoveWish}
+                    pendingAddId={pendingAddId}
+                    pendingRemoveId={pendingRemoveId}
+                    canWish={isAuthenticated}
+                    onBidClick={handleBidClick}
+                    onSelect={(item) => {
+                        navigate(`/auction/${item.id}`);
+                    }}
+                />
+            </main>
+            {isModalOpen && selectedItem && (
+                <AuctionModal
+                    isOpen={isModalOpen}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        setSelectedItem(null);
+                    }}
+                    currentBid={selectedItem.currentBid ?? 0}
+                    onSubmit={() => {
+                    }}
+                />
+            )}
+        </div>
+    );
+};
+
+export default AuctionPage;
