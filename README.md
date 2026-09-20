@@ -15,6 +15,7 @@
   * **[ecomm](./backend/books/modern-api-dev-with-spring/ecomm)/** : Spring Boot e-commerce REST API from the *Modern API Development with Spring* book, covering JWT auth, HATEOAS, and full observability (Prometheus/Grafana metrics, Zipkin tracing, ELK logging).
 * **integrated/** : Full-stack applications combining React frontend and Spring Boot backend systems.
   * **[full-stack-react-spring-boot](./integrated/courses/udemy/full-stack-react-spring-boot)/** : Full-stack e-commerce application built across a 21-section React and Spring Boot course.
+  * **[solebid](./integrated/training/sesac/solebid)/** : Full-stack sneaker auction marketplace combining a React/TypeScript frontend with a Spring Boot backend, featuring real-time bidding over SSE, Redis-backed notifications, and PortOne point-based payments.
 
 ## Tech Stack
 
@@ -26,3 +27,4 @@
 ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat-square&logo=prometheus&logoColor=white)
 ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white)
 ![Elasticsearch](https://img.shields.io/badge/Elasticsearch-005571?style=flat-square&logo=elasticsearch&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
