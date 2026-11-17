@@ -1,11 +1,16 @@
 import { useDeleteTodoMutation } from "@/hooks/mutations/use-delete-todo-mutation";
 import { useUpdateTodoMutation } from "@/hooks/mutations/use-update-todo-mutation";
-import type { Todo } from "@/types";
+import { useTodoDataById } from "@/hooks/queries/use-todo-data-by-id";
 import { Link } from "react-router";
 import { Button } from "../ui/button";
 
-export default function TodoItem({ id, content, isDone }: Todo) {
+export default function TodoItem({ id }: { id: string }) {
   // const deleteTodo = useDeleteTodo();
+
+  const { data: todo } = useTodoDataById(id, "LIST");
+  if (!todo) throw new Error("Todo Data Undefined");
+  const { content, isDone } = todo;
+
   const { mutate: updateTodo } = useUpdateTodoMutation();
   const { mutate: deleteTodo, isPending } = useDeleteTodoMutation();
 
