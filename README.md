@@ -5,6 +5,10 @@
 ## Tech Stack
 
 ![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-443E38?style=flat-square&logo=react&logoColor=white)
+![TanStack Query](https://img.shields.io/badge/TanStack_Query-FF4154?style=flat-square&logo=reactquery&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=spring-boot&logoColor=white)
 ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=flat-square&logo=spring-security&logoColor=white)
 ![Ktor](https://img.shields.io/badge/Ktor-087CFA?style=flat-square&logo=ktor&logoColor=white)
@@ -21,6 +25,7 @@
 | 프로젝트 | 유형 | 출처 | 내용 |
 | --- | --- | --- | --- |
 | [ecomm-ui](frontend/books/modern-api-dev-with-spring/ecomm-ui) | 도서 | Modern API Development with Spring | React 기반 이커머스 UI (인증, 장바구니, 상품/주문 조회) |
+| [react-library-kit-practice](frontend/courses/inflearn/react-library-kit-practice) | 강의 | 인프런 - 한입 리액트 실전 라이브러리 키트 - Zustand, Tanstack Query, TailwindCSS | Zustand 전역 상태와 TanStack Query 기반 Todo CRUD (낙관적 업데이트·롤백, 쿼리 캐시 정규화), Tailwind/shadcn UI |
 
 ### Backend
 
